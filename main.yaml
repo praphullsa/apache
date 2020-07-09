@@ -1,8 +1,11 @@
 ---
   - name: Playbook
     hosts: webservers
-    become: yes
-    become_user: root
+    become: yes               # If to escalate privilege
+    become_method: sudo       # Set become method
+    remote_user: ubuntu         # Update username for remote server
+    ignore_unreachable: true
+    ignore_errors: true
     tasks:
       - name: Update apt and install docker-ce
-      apt: update_cache=yes name=docker-ce state=latest
+        apt: update_cache=yes name=docker-ce state=latest
