@@ -1,11 +1,19 @@
 ---
-  - name: Playbook
-    hosts: webservers
-    become: yes               # If to escalate privilege
-    become_method: sudo       # Set become method
-    remote_user: ubuntu         # Update username for remote server
-    ignore_unreachable: true
-    ignore_errors: true
-    tasks:
-      - name: Update apt and install docker-ce
-        apt: update_cache=yes name=docker-ce state=latest
+- name: Playbook
+  hosts: webservers
+  become: yes # If to escalate privilege
+  become_method: sudo # Set become method
+  remote_user: ubuntu # Update username for remote server
+  ignore_unreachable: true
+  ignore_errors: true
+  tasks:
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+    - name: Update apt and install docker-ce
+      apt: update_cache=yes name=docker-ce state=latest
